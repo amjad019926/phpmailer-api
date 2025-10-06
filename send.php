@@ -10,7 +10,7 @@ $email = $_POST['email'] ?? null;
 $text  = $_POST['text'] ?? null;
 
 if (!$email || !$text) {
-    echo json_encode(["status"=>"error","message"=>"Email or text missing"]);
+    echo json_encode(["status" => "error", "message" => "Email or text missing"]);
     exit;
 }
 
@@ -18,10 +18,10 @@ $mail = new PHPMailer(true);
 
 try {
     $mail->isSMTP();
-    $mail->Host       = 'amjad019926.gmail.com';
+    $mail->Host       = 'smtp.gmail.com'; // FIXED
     $mail->SMTPAuth   = true;
     $mail->Username   = 'amjad019926@gmail.com';
-    $mail->Password   = 'snqi roxk gwkv rtmq';
+    $mail->Password   = 'snqi roxk gwkv rtmq'; // Use App Password
     $mail->SMTPSecure = 'tls';
     $mail->Port       = 587;
 
@@ -32,7 +32,9 @@ try {
     $mail->Subject = 'Test Mail from API';
     $mail->Body    = $text;
 
-    echo json_encode(["status"=>"success","message"=>"Mail sent"]);
+    $mail->send(); // ACTUALLY SENDS THE EMAIL
+
+    echo json_encode(["status" => "success", "message" => "Mail sent"]);
 } catch (Exception $e) {
-    echo json_encode(["status"=>"error","message"=>$mail->ErrorInfo]);
+    echo json_encode(["status" => "error", "message" => $mail->ErrorInfo]);
 }
